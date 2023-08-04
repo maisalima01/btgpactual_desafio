@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
+model Customer {
   id              Int       @id @unique @default(autoincrement())
   name            String
   email           String    @unique
@@ -31,12 +31,12 @@ model Client {
   updatedAt       DateTime?
   account         Account?
 
-  @@map("clients")
+  @@map("customers")
 }
 
 model Account {
   id             Int           @id @unique @default(autoincrement())
-  client_id      Int           @unique
+  customer_id    Int           @unique
   holder         String
   agency         Int
   account_number Int
@@ -45,7 +45,7 @@ model Account {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime?
   transactions   Transaction[]
-  client         Client        @relation(fields: [client_id], references: [id])
+  customer       Customer      @relation(fields: [customer_id], references: [id])
 
   @@map("accounts")
 }

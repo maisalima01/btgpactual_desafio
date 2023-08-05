@@ -35,11 +35,9 @@ model Customer {
 }
 
 model Account {
-  id             Int           @id @unique @default(autoincrement())
+  account_number Int           @id @unique @default(autoincrement())
   customer_id    Int           @unique
-  holder         String
   agency         Int
-  account_number Int
   balance        Float
   account_status Int
   createdAt      DateTime      @default(now())
@@ -51,12 +49,12 @@ model Account {
 }
 
 model Transaction {
-  id         Int      @id @unique @default(autoincrement())
-  account_id Int      @unique
-  value      Float
-  date       DateTime
-  type       String
-  account    Account  @relation(fields: [account_id], references: [id])
+  id             Int      @id @unique @default(autoincrement())
+  account_number Int      @unique
+  value          Float
+  date           DateTime
+  type           String
+  account        Account  @relation(fields: [account_number], references: [account_number])
 
   @@map("transactions")
 }

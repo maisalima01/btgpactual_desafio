@@ -1,31 +1,22 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpStatus,
-  Post,
-  Get,
-  Param,
-} from '@nestjs/common';
+import { Body, Controller, Post, Get, Param } from '@nestjs/common';
 import { TransactionService } from '../services/transaction-service';
 import { Transaction } from '@prisma/client';
 
 @Controller('transaction')
 export class TransactionController {
-  constructor(private transactionService: TransactionService) {}
+  constructor(private readonly transactionService: TransactionService) {}
+
   @Post()
-  async createTransaction(@Body() transaction: Transaction) {
-    const data = await this.transactionService.createTransaction(transaction);
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async createTransaction(
+    @Body()
+    transactionData: {
+      account_id: number;
+      value: number;
+      date: Date;
+      type: string;
+    },
+  ): Promise<Transaction> {
+    return this.transactionService.createTransaction(transactionData);
   }
 
   @Get('/transactions/:account')

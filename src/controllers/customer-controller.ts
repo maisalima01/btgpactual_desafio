@@ -1,6 +1,16 @@
-import { Body, Controller, Post, Get, Param, Put } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Param,
+  Put,
+  BadRequestException,
+} from '@nestjs/common';
 import { CustomerService } from '../services/customer-service';
 import { Customer } from '@prisma/client';
+import * as moment from 'moment';
 
 @Controller('customer')
 export class CustomerController {
@@ -27,6 +37,23 @@ export class CustomerController {
       civil_status: string;
     },
   ): Promise<Customer> {
+    if (customerData.password.length < 6 || customerData.password.length > 8) {
+      throw new BadRequestException(
+        'The password must be between 6 and 8 digits.',
+      );
+    }
+    if (
+      customerData.password ==
+        moment.utc(customerData.date_of_birth).format('YYYYMMDD') ||
+      customerData.password ==
+        moment.utc(customerData.date_of_birth).format('DDMMYYYY')
+    ) {
+      throw new BadRequestException(
+        'The password cannot be your date of birth.',
+      );
+    }
+    const encryptedPassword = bcrypt.hashSync(customerData.password, 10);
+    customerData.password = encryptedPassword;
     return this.customerService.createCustomer(customerData);
   }
 

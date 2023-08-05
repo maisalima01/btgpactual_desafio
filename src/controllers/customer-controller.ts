@@ -1,76 +1,74 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpStatus,
-  Post,
-  Get,
-  Param,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put } from '@nestjs/common';
 import { CustomerService } from '../services/customer-service';
 import { Customer } from '@prisma/client';
 
 @Controller('customer')
 export class CustomerController {
-  constructor(private customerService: CustomerService) {}
+  constructor(private readonly customerService: CustomerService) {}
+
   @Post()
-  async createCustomer(@Body() customer: Customer) {
-    const data = await this.customerService.createCustomer(customer);
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async createCustomer(
+    @Body()
+    customerData: {
+      name: string;
+      email: string;
+      password: string;
+      address: string;
+      district: string;
+      city: string;
+      state: string;
+      zip_code: string;
+      document_number: number;
+      issuer: string;
+      date_of_birth: Date;
+      cel_phone: string;
+      profession: string;
+      income: number;
+      civil_status: string;
+    },
+  ): Promise<Customer> {
+    return this.customerService.createCustomer(customerData);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    const data = await this.customerService.findOne(id);
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async findById(@Param('id') id: string): Promise<Customer> {
+    return this.customerService.getCustomer({ id: Number(id) });
   }
 
   @Get('/document/:document')
-  async findByDocument(@Param('document') document: number) {
-    const data = await this.customerService.findByDocument(document);
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async findByDocument(@Param('document') document: string) {
+    return this.customerService.getCustomer({
+      document_number: Number(document),
+    });
   }
 
   @Put(':id')
-  async update(@Param('id') id: number) {
-    const data = await this.customerService.update(id);
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async update(
+    @Param('id') id: string,
+    @Body()
+    customerData: {
+      name: string;
+      email: string;
+      password: string;
+      address: string;
+      district: string;
+      city: string;
+      state: string;
+      zip_code: string;
+      document_number: number;
+      issuer: string;
+      date_of_birth: Date;
+      cel_phone: string;
+      profession: string;
+      income: number;
+      civil_status: string;
+    },
+  ): Promise<Customer> {
+    return this.customerService.updateCustomer({
+      where: {
+        id: Number(id),
+      },
+      data: customerData,
+    });
   }
 }

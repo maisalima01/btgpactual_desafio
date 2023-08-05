@@ -7,15 +7,15 @@ export class TransactionService {
   constructor(private prismaService: PrismaService) {}
 
   async createTransaction(
-    data: Prisma.TransactionCreateInput,
+    data: Prisma.TransactionUncheckedCreateInput,
   ): Promise<Transaction> {
     return this.prismaService.transaction.create({ data });
   }
 
-  async getTransaction(
+  async getTransactionsByAccount(
     transactionWhereUniqueInput: Prisma.TransactionWhereUniqueInput,
-  ): Promise<Transaction | null> {
-    return this.prismaService.transaction.findUnique({
+  ): Promise<Transaction[] | null> {
+    return this.prismaService.transaction.findMany({
       where: transactionWhereUniqueInput,
     });
   }

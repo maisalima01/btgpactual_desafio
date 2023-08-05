@@ -1,13 +1,39 @@
-import MESSAGE from '../constants/messages';
+import { PrismaService } from './prisma-service';
 import { Injectable } from '@nestjs/common';
-import { CustomerController } from 'src/controllers/customer-controller';
-import { Customer } from '@prisma/client';
+import { Customer, Prisma } from '@prisma/client';
 
 @Injectable()
 export class CustomerService {
-   async createCustomer(customer: Customer): Promise<any> {
-    try {
-        
+  constructor(private prismaService: PrismaService) {}
+
+  async createCustomer(data: Prisma.CustomerCreateInput): Promise<Customer> {
+    const customerAlreadyExists = await this.prismaService.customer.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+    if (customerAlreadyExists === null) {
+      return this.prismaService.customer.create({ data });
     }
-   }
+    return null;
+  }
+
+  async getCustomer(
+    customerWhereUniqueInput: Prisma.CustomerWhereUniqueInput,
+  ): Promise<Customer | null> {
+    return this.prismaService.customer.findUnique({
+      where: customerWhereUniqueInput,
+    });
+  }
+
+  async updateCustomer(params: {
+    where: Prisma.CustomerWhereUniqueInput;
+    data: Prisma.CustomerUpdateInput;
+  }): Promise<Customer> {
+    const { where, data } = params;
+    return this.prismaService.customer.update({
+      data,
+      where,
+    });
+  }
 }

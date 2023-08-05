@@ -20,19 +20,9 @@ export class TransactionController {
   }
 
   @Get('/transactions/:account')
-  async findTransactionsByAccount(@Param('account') account: number) {
-    const data = await this.transactionService.findTransactionsByAccount(
-      account,
-    );
-    if (data.name === 'error') {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: data.message,
-      });
-    }
-    return {
-      statusCode: HttpStatus.OK,
-      message: data.message,
-    };
+  async findTransactionsByAccount(@Param('account') account: string) {
+    return this.transactionService.getTransactionsByAccount({
+      account_number: Number(account),
+    });
   }
 }

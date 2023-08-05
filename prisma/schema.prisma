@@ -9,3 +9,54 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Customer {
+  id              Int       @id @unique @default(autoincrement())
+  name            String
+  email           String    @unique
+  password        String
+  address         String
+  district        String
+  city            String
+  state           String
+  zip_code        String
+  document_number Int       @unique
+  issuer          String
+  date_of_birth   DateTime
+  cel_phone       String
+  profession      String
+  income          Float
+  civil_status    String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime?
+  account         Account?
+
+  @@map("customers")
+}
+
+model Account {
+  id             Int           @id @unique @default(autoincrement())
+  customer_id    Int           @unique
+  holder         String
+  agency         Int
+  account_number Int
+  balance        Float
+  account_status Int
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime?
+  transactions   Transaction[]
+  customer       Customer      @relation(fields: [customer_id], references: [id])
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id         Int      @id @unique @default(autoincrement())
+  account_id Int      @unique
+  value      Float
+  date       DateTime
+  type       String
+  account    Account  @relation(fields: [account_id], references: [id])
+
+  @@map("transactions")
+}

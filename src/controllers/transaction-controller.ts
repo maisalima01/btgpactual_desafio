@@ -10,7 +10,7 @@ export class TransactionController {
   async createTransaction(
     @Body()
     transactionData: {
-      account_id: number;
+      account_number: number;
       value: number;
       date: Date;
       type: string;

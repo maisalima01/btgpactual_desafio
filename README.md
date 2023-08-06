@@ -57,4 +57,4 @@ $ npm run start
 
 ## **Documentação da API**
 
-<a href="https://documenter.getpostman.com/view/23970320/2s847PKVYF">Link Documentação API</a>
+<a href="https://documenter.getpostman.com/view/23891722/2s9XxyRtT7">Link Documentação API</a>

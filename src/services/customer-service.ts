@@ -6,7 +6,7 @@ import { Customer, Prisma } from '@prisma/client';
 export class CustomerService {
   constructor(private prismaService: PrismaService) {}
 
-  async createCustomer(data: Prisma.CustomerCreateInput): Promise<Customer> {
+  async createCustomer(data: Prisma.CustomerCreateInput): Promise<Customer | null> {
     const customerAlreadyExists = await this.prismaService.customer.findFirst({
       where: {
         email: data.email,

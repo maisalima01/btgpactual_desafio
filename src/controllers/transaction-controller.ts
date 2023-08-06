@@ -16,13 +16,12 @@ export class TransactionController {
       type: string;
     },
   ): Promise<Transaction> {
+    transactionData.date = new Date();
     return this.transactionService.createTransaction(transactionData);
   }
 
   @Get('/transactions/:account')
   async findTransactionsByAccount(@Param('account') account: string) {
-    return this.transactionService.getTransactionsByAccount({
-      account_number: Number(account),
-    });
+    return this.transactionService.getTransactionsByAccount(Number(account));
   }
 }

@@ -13,10 +13,12 @@ export class TransactionService {
   }
 
   async getTransactionsByAccount(
-    transactionWhereUniqueInput: Prisma.TransactionWhereUniqueInput,
+    accountNumber: number,
   ): Promise<Transaction[] | null> {
     return this.prismaService.transaction.findMany({
-      where: transactionWhereUniqueInput,
+      where: {
+        account_number: accountNumber,
+      },
     });
   }
 }

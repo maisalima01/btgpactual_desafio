@@ -19,7 +19,7 @@ export class AccountController {
       balance: number;
       account_status: number;
     },
-  ): Promise<Account> {
+  ): Promise<Account | null> {
     return this.accountService.createAccount(accountData);
   }
 

@@ -15,6 +15,10 @@ TypeScript
 
 PostgreSQL
 
+## **Diagrama Entidade Relacionamento**
+
+![alt text](btg_atualizado.drawio.png)
+
 ## **Tecnologias utilizadas**
 
 * Node.js

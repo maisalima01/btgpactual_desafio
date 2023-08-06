@@ -12,7 +12,7 @@ export class AccountService {
 
   async createAccount(
     data: Prisma.AccountUncheckedCreateInput,
-  ): Promise<Account> {
+  ): Promise<Account | null> {
     const customer = await this.cutomerService.getCustomer({
       id: data.customer_id,
     });

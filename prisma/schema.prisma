@@ -50,7 +50,7 @@ model Account {
 
 model Transaction {
   id             Int      @id @unique @default(autoincrement())
-  account_number Int      @unique
+  account_number Int      
   value          Float
   date           DateTime
   type           String

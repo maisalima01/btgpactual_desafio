@@ -36,7 +36,7 @@ export class CustomerController {
       income: number;
       civil_status: string;
     },
-  ): Promise<Customer> {
+  ): Promise<Customer | null> {
     if (customerData.password.length < 6 || customerData.password.length > 8) {
       throw new BadRequestException(
         'The password must be between 6 and 8 digits.',
@@ -58,7 +58,7 @@ export class CustomerController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Customer> {
+  async findById(@Param('id') id: string): Promise<Customer | null> {
     return this.customerService.getCustomer({ id: Number(id) });
   }
 
